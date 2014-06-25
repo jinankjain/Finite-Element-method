@@ -1,0 +1,67 @@
+\documentclass{report}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\begin{document}
+\begin{center}
+\begin{spacing}{1.5} { \textbf{ {\Large IMPLEMENTATION OF PARABOLIC INTERFACE FINITE ELEMENT METHOD  \bigskip } } }
+\end{spacing}
+\bigskip \bigskip \bigskip \bigskip \bigskip A Project Report Submitted \\ in Partial Fulfilment of the Requirements for\\ \begin{spacing}{1.5} {\textbf{ \Large Summer Internship}}\end{spacing}
+at \\ \begin{spacing}{1.5} {\textbf{ \Large Indian Institute Of Technology Guwahati \linebreak[5] }}
+\end{spacing}
+\bigskip\bigskip\bigskip\bigskip
+by\\ Jinank Jain\\ (Roll No. UG201210017)\\ B.Tech, 2nd Year\\Computer Science and Engineering\\ Indian Institute Of Technology Jodhpur\\ \bigskip \bigskip
+\includegraphics[scale=0.07]{iitg}\\ \bigskip to the\\ 
+ \begin{spacing}{1.4} {\textbf{ \large DEPARTMENT OF MATHEMATICS \\ INDIAN INSTITUTE OF TECHNOLOGY GUWAHATI \\ GUWAHATI - 781039, INDIA\\ \bigskip}}\end{spacing}
+ \textsl{July, 2014}
+ 
+ % % % % % Certificate Page Begins Here
+ \newpage
+ {\textbf{ \Large CERTIFICATE\\ \bigskip}}
+ \end{center}
+ 
+ \begin{flushleft}
+ This is to certify that the work contained in this project report entitled as \textbf{"Implementatiom of Parabolic Interface Finite Element Method"} \textbf{Jinank Jain (Roll No. UG201210017)} to Indian Institute of Technology towards partial requirement of \textbf{Summer Internship} which has been carried out by him under my supervision and that it has not been submitted elsewhere for the award of any degree.\\
+ \end{flushleft}
+ \bigskip \bigskip \bigskip \bigskip \bigskip
+ 
+% \noindent \textbox{Guwahati - 781 039\hfill} \textbox{\hfill  (Dr. Rajen Kumar Sinha)}\\
+% \noindent \textbox{July 2014\hfill} \textbox{\hfill  Project Supervisor} 
+\noindent Guwahati - 781 039\hfill \hfill (Dr. Rajen Kumar Sinha)\\
+\noindent July 2014\hfill \hfill Project Supervisor\\
+
+% % % % Abstract Page Begins Here
+\newpage
+\begin{center}
+ {\textbf{ \Large ABSTRACT\\ \bigskip}}
+\end{center}
+\begin{flushleft}
+Finite Element Method is a numerical method for finding approximate solution to boundary value problems for differntial equation. It uses variational method to minimize an error function and produce a stable solution.
+\end{flushleft}
+
+% % % % Contents Page
+
+\tableofcontents
+\chapter{The Finite Element Method}
+\section{Introduction}
+\begin{spacing}{1.5}
+From the ancient times, scientists and philosophers have been curious about different physical phenomenon occuring in the nature and have tried to understand and analyze the same. Almost every phenomenon today, whether simple or complex, can be described using the laws of physics with the help of mathematical modeling.\\ \\
+\textbf{Definition 1.1.1} A mathematical model is a description of a system using mathematical concepts and language. The process of developing a mathematical model is termed \textsl{mathematical modeling}.\\ \\
+Most of the practical problems of engineering involve very complex differential and/or integral equations posed on geometrically complicated domains. Solving and analyzing these models analaytically is too complex and will take much longer time. Howerever with the help of a computer ans some numerical methods it can be convenient to analyze these and it also proves to be very useful to analyze the effects of different paramaters on the system effectively. \\ \\
+\textbf{Definition 1.1.2}  The study of algorithms that use numerical approximation for the problems of mathematical analysis is called a \textsl{numerical analysis}.\\ \\ 
+There exists various numerical meyhods to solve the differential equations but the most powerful of these numerical methods is the \textbf{\textsl{finite element method} (or FEM)}. It is a technique for finding an approximate solution of boundary value and initial value problems characterized by partial differential equation. It produces a stable solution of the problem to minimize the error using the variational method.
+\end{spacing}
+\section{The Basic Idea}
+\begin{spacing}{1.5}
+The most distinctive feature of finite element method that seperates it from others is the division of a given domain into a set of simple subdomains, called finite elements. Any geometric shape that allows computation of the solution or its approximation, or provides necessary relations among the values of the solution at selected points, called nodes, of the subdomain, qualifies as finite element. Other features of the method include seeking continuous, often polynomial, approximations of the solution over each element in terms of nodal values, and assembly of elements equations by imposing the interelement continuity of the solution and balance of interelement forces.\\
+There are three stages in the whole process where errors are generally introduced in most cases. The first is the partition of the domain into smaller subdomains and then assembling it back to generate the original domain which introduces some errors in the domain during the processs. Second stage is when element equations are derived. The dependent unknowns(u) of the problem are approximated with the idea that any continous function can be represented by a linear combination of unknown functions $ \phi_{i} $ and undetermined coefficents c_{i} ( $ u \approx u_{h} = \Sigma {c_{i}\phi_{i}}$ ) . Algebraic relations among the undetermined coefficients  c$_{i}$ are obtained by satisfying the govering equations over each element in a weighted integral snese. The approximation functions $ \phi_{i}$ are often taken to be polynomails and are derived using the concepts from interpolation theory. Therefore they are termed as \textsl{interpolation functions. }So in the second stage , errors are introduced both in representing the solution u as well as in evaluating the integrals. And lastly errors are introduced in solving the assembled system of equations.
+\end{spacing}
+\section{Implementaion with Analysis}
+\section{Summary}
+\chapter{The Finite Differnece Method}
+\section{Introduction}
+\section{Backward Euler Method}
+\section{Crank Nicklson Method}
+
+\end{document}

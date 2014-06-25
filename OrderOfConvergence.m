@@ -22,7 +22,7 @@ for k = 1:NoIteration
     dt(k) = c*h(k)^2;
     N(k) = T/dt(k);
     [U,A,B,ndof] = femParabolic(c4n,n4e,unique(n4sDb),N(k,1),dt(k,1)); % This subroutine helps in caluclating in finite element solution which gives for paramater degree of U(finite element solution), ndof(number of free nodes), Mass Matrix(A) and Volume Matrix(B)
-    [maxL2e(k),L2H1e(k)] = ocparafem(N(k,1),c4n,n4e,n4sDb,T,dt(k,1),U2)% This is a subrountine helps in calculating in order of convergence
+    [maxL2e(k),L2H1e(k)] = ocparafem(N(k,1),c4n,n4e,n4sDb,T,dt(k,1),U)% This is a subrountine helps in calculating in order of convergence
     n4sMarked = markUniform(n4e);
     [c4n,n4e,n4sDb,n4sNb] = refineRGB(c4n,n4e,n4sDb,[],n4sMarked); % This subroutines helps in refinement of current mesh.
 end
