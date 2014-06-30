@@ -2,10 +2,15 @@
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{amsthm}
+\usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\numberwithin{equation}{chapter}
+
 \begin{document}
 \begin{center}
-\begin{spacing}{1.5} { \textbf{ {\Large IMPLEMENTATION OF PARABOLIC INTERFACE FINITE ELEMENT METHOD  \bigskip } } }
+\begin{spacing}{1.5} { \textbf{ {\Large IMPLEMENTATION OF FINITE ELEMENT METHOD FOR PARABOLIC INTERFACE PROBLEM  \bigskip } } }
 \end{spacing}
 \bigskip \bigskip \bigskip \bigskip \bigskip A Project Report Submitted \\ in Partial Fulfilment of the Requirements for\\ \begin{spacing}{1.5} {\textbf{ \Large Summer Internship}}\end{spacing}
 at \\ \begin{spacing}{1.5} {\textbf{ \Large Indian Institute Of Technology Guwahati \linebreak[5] }}
@@ -22,7 +27,7 @@ by\\ Jinank Jain\\ (Roll No. UG201210017)\\ B.Tech, 2nd Year\\Computer Science a
  \end{center}
  
  \begin{flushleft}
- This is to certify that the work contained in this project report entitled as \textbf{"Implementatiom of Parabolic Interface Finite Element Method"} \textbf{Jinank Jain (Roll No. UG201210017)} to Indian Institute of Technology towards partial requirement of \textbf{Summer Internship} which has been carried out by him under my supervision and that it has not been submitted elsewhere for the award of any degree.\\
+ This is to certify that the work contained in this project report entitled as \textbf{"Implementatiom of Finite Element Method for Parabolic Interface Problem"} \textbf{Jinank Jain (Roll No. UG201210017)} to Indian Institute of Technology towards partial requirement of \textbf{Summer Internship} which has been carried out by him under my supervision and that it has not been submitted elsewhere for the award of any degree.\\
  \end{flushleft}
  \bigskip \bigskip \bigskip \bigskip \bigskip
  
@@ -55,10 +60,89 @@ There exists various numerical meyhods to solve the differential equations but t
 \section{The Basic Idea}
 \begin{spacing}{1.5}
 The most distinctive feature of finite element method that seperates it from others is the division of a given domain into a set of simple subdomains, called finite elements. Any geometric shape that allows computation of the solution or its approximation, or provides necessary relations among the values of the solution at selected points, called nodes, of the subdomain, qualifies as finite element. Other features of the method include seeking continuous, often polynomial, approximations of the solution over each element in terms of nodal values, and assembly of elements equations by imposing the interelement continuity of the solution and balance of interelement forces.\\
-There are three stages in the whole process where errors are generally introduced in most cases. The first is the partition of the domain into smaller subdomains and then assembling it back to generate the original domain which introduces some errors in the domain during the processs. Second stage is when element equations are derived. The dependent unknowns(u) of the problem are approximated with the idea that any continous function can be represented by a linear combination of unknown functions $ \phi_{i} $ and undetermined coefficents c_{i} ( $ u \approx u_{h} = \Sigma {c_{i}\phi_{i}}$ ) . Algebraic relations among the undetermined coefficients  c$_{i}$ are obtained by satisfying the govering equations over each element in a weighted integral snese. The approximation functions $ \phi_{i}$ are often taken to be polynomails and are derived using the concepts from interpolation theory. Therefore they are termed as \textsl{interpolation functions. }So in the second stage , errors are introduced both in representing the solution u as well as in evaluating the integrals. And lastly errors are introduced in solving the assembled system of equations.
+There are three stages in the whole process where errors are generally introduced in most cases. The first is the partition of the domain into smaller subdomains and then assembling it back to generate the original domain which introduces some errors in the domain during the processs. Second stage is when element equations are derived. The dependent unknowns($u$) of the problem are approximated with the idea that any continous function can be represented by a linear combination of unknown functions $ \phi_{i} $ and undetermined coefficents $ c_{i} $ ( $ u \approx u_{h} = \Sigma {c_{i}\phi_{i}}$ ) . Algebraic relations among the undetermined coefficients  c$_{i}$ are obtained by satisfying the govering equations over each element in a weighted integral snese. The approximation functions $ \phi_{i}$ are often taken to be polynomails and are derived using the concepts from interpolation theory. Therefore they are termed as \textsl{interpolation functions. }So in the second stage , errors are introduced both in representing the solution $ u $ as well as in evaluating the integrals. And lastly errors are introduced in solving the assembled system of equations.
 \end{spacing}
 \section{Implementaion with Analysis}
+\begin{spacing}{1.5}
+To better understand how to implement the finite element method to a problem, we take an example from [11].\\ \\
+\textbf{Example 1.3.1.} Approximation of the perimeter of a circle.\\
+Consider the problem of determining the perimeter of a circle of radius R without using the formula ($P = 2\pi r$) for the perimater of a circle. Ancient mathematicians used to approximate value of the perimeter by straight line segments as $\pi$ was not known. Thus, the approximate value of the perimeter is obtained by adding the length pf the line segments used to represent it.\\
+With the help of this example we outline the basic ideas and steps involved in the finite element analysis of a problem.\\
+\begin{description}
+  \item[1. Finite Element Discretization:] First, the perimeter(domain of this problem) is divided into a collection of finite ($n$) number of subdoamins called line segments. This is called \textsl{discretization of the domain.} ome errors would be introduce here because we will need an infinite number of line elements to represent the exact perimeter. Each subdomain(i.e., line segment) is called an \textsl{element}. The collection of these elements is called \textsl{the finite element mesh}. The points at which elements are connected to each other are called \textsl{nodes}. In this case, we discretize the perimeter into a mesh of five line segments making $n$ = 5. The mesh is said to be uniform if all the elemnents are of same length; otherwise, it is called a \textsl{nonuniform} mesh.
+  \item[2. Element Equation:] An element(i.e., line segment, $\Omega_{e}$) is isolated and its required properties (length in this case) are computed by appropriate means. Let $h_{e}$ be the of the element $\Omega_{e}$ in the mesh. For a typical $\Omega_{e}$, $h_{e}$ is given by
+  \begin{center}
+  \begin{equation}
+  	h_{e}= 2R\sin\frac{1}{2}\theta_{e}
+  \end{equation}
+  \end{center}
+  where R is the radius of the circle and $\theta_{e} \textless \pi$ is the angle subtended by the line segement. The above equations are called \textsl{element equations.}
+  \item[3. Assembly of elements equations and solutions:] The approximate value of the perimeter of the circle is obtained by putting together the element properties in a meaningful way and the process is known as the \textsl{assembly of the element equations.} In the present case it follows the property that the perimeter of the polygon $\Omega_{h}$(circle approximated by assembly of elements) is equal to the sum of the lengths of the individual elements:
+  \begin{center}
+    \begin{equation}
+    	P_{n}= \sum_{e=1}^{n}h_{e}
+    \end{equation}
+    \end{center}
+    Then $P_{n}$ represents an approximation to the actual perimeter, P. If the mesh is uniform, or $h_{e}$ is the same for each of the elements in the mesh, then $\theta_{e} = \frac{2\pi}{n}$, and we have
+     \begin{center}
+        \begin{equation}
+        	P_{n} = n\left(2R\sin\frac{\pi}{n} \right)
+        \end{equation}
+     \end{center}
+  \item[4. Convergence and error estimate:] Since we know the solution to this simple problem ($P = 2\pi R$), we can easily estimate the error in the approximation and show that the approximate solution $P_{n}$ converges to the exact value P as we increase the number of line segments used to approximate the perimeter(i.e., as $n \rightarrow \infty $). Consider a typical element $\Omega_{e}$. The error in the approximation is equal to the differnce between the length of the arc and that of the line segment
+  \begin{center}
+          \begin{equation}
+          	E_{e} = \mid S_{e}-h_{e} \mid
+          \end{equation}
+       \end{center}
+  where $S_{e} = R\theta_{e}$ is the arc length. Thus the error estimate for an element for an element in the mesh is given by
+  \begin{center}
+            \begin{equation}
+            	E_{e} = R\left(\frac{2\pi}{n}-2\sin\frac{\pi}{n}\right)
+            \end{equation}
+  \end{center}
+  The total error or the global error is given by multiplying $E_{e}$ by $n$:
+  \begin{center}
+              \begin{equation}
+              	E = nE_{e} = 2R\left(\pi-n\sin\frac{\pi}{n}\right) = 2\pi R-P_{n} = P-P_{n}
+              \end{equation}
+    \end{center}
+    We now show that E goes to zero as $n \rightarrow \infty$. Letting $x = \frac{1}{n}$, we have
+    \begin{center}
+         \begin{equation}
+         P_{n} = 2Rn\sin\frac{\pi}{n} = 2R\frac{\sin\pi x}{x}         	
+         \end{equation}
+    \end{center}
+    and
+\begin{center}
+         \begin{equation}
+         \lim\limits_{n\rightarrow \infty}P_{n} =  \lim\limits_{n\rightarrow \infty}(2R\frac{\sin\pi x}{x}) = 2\pi R         	
+         \end{equation}
+\end{center}
+\end{description}
+\begin{center}
+\begin{tikzpicture}
+\draw (2,2) circle (2cm);
+\end{tikzpicture}
+\end{center}
+\end{spacing}
 \section{Summary}
+\begin{spacing}{1.5}
+FEM is a numerical method to solve Boundary Value Problem(BVPs)(for e.g, structural and solid mechanics problem in engineering). The fundamental concept behind FEM is that any continous quantity such as temperature, pressure etc. can be approximated by a discrete model composed of a set of piecewise continous polynomial functions defined over a finite number of subdomains (elements). It has applications in areas like heat transfer, fluid mechnaics etc.\\ \\
+\textbf{Advantages of the finite element method:}\\
+\begin{itemize}
+  \item Extensive application: applies to all physical problems in BVP or structural and solid mechanics.
+  \item Application to composite materials: material properties in adjacent do not need to be same. 
+  \item Applies to irregularly shaped boundaries as well: any boundary can be approximated using elements with straight sides or matched exactly using elements with curved boundaries.
+  \item Scalable mesh: size of the elements can be vaired allowing the element grid or mesh to be expanded or refined as per the requirement.
+  \item Mixed boundary conditions handling: boundary conditions such as discontinous surface loadings present no difficulties.
+\end{itemize}
+\textbf{Disadvantages and Limitations:}\\
+\begin{itemize}
+\item Gives solution only at nodal points.
+\item Gives an approximate solution.
+\end{itemize}
+\end{spacing}
 \chapter{The Finite Differnece Method}
 \section{Introduction}
 \section{Backward Euler Method}
