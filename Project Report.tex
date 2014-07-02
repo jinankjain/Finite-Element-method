@@ -67,9 +67,17 @@ There are three stages in the whole process where errors are generally introduce
 To better understand how to implement the finite element method to a problem, we take an example from [11].\\ \\
 \textbf{Example 1.3.1.} Approximation of the perimeter of a circle.\\
 Consider the problem of determining the perimeter of a circle of radius R without using the formula ($P = 2\pi r$) for the perimater of a circle. Ancient mathematicians used to approximate value of the perimeter by straight line segments as $\pi$ was not known. Thus, the approximate value of the perimeter is obtained by adding the length pf the line segments used to represent it.\\
+\begin{center}
+\includegraphics[scale=0.5]{circle}\\
+Fig 1.1 A circle of radius R
+\end{center}
 With the help of this example we outline the basic ideas and steps involved in the finite element analysis of a problem.\\
 \begin{description}
   \item[1. Finite Element Discretization:] First, the perimeter(domain of this problem) is divided into a collection of finite ($n$) number of subdoamins called line segments. This is called \textsl{discretization of the domain.} ome errors would be introduce here because we will need an infinite number of line elements to represent the exact perimeter. Each subdomain(i.e., line segment) is called an \textsl{element}. The collection of these elements is called \textsl{the finite element mesh}. The points at which elements are connected to each other are called \textsl{nodes}. In this case, we discretize the perimeter into a mesh of five line segments making $n$ = 5. The mesh is said to be uniform if all the elemnents are of same length; otherwise, it is called a \textsl{nonuniform} mesh.
+  \begin{center}
+  \includegraphics[scale=0.5]{circle1}\\
+  Fig 1.2 Discretization of circle with n=5
+  \end{center}
   \item[2. Element Equation:] An element(i.e., line segment, $\Omega_{e}$) is isolated and its required properties (length in this case) are computed by appropriate means. Let $h_{e}$ be the of the element $\Omega_{e}$ in the mesh. For a typical $\Omega_{e}$, $h_{e}$ is given by
   \begin{center}
   \begin{equation}
@@ -121,9 +129,7 @@ With the help of this example we outline the basic ideas and steps involved in t
 \end{center}
 \end{description}
 \begin{center}
-\begin{tikzpicture}
-\draw (2,2) circle (2cm);
-\end{tikzpicture}
+
 \end{center}
 \end{spacing}
 \section{Summary}
@@ -143,9 +149,104 @@ FEM is a numerical method to solve Boundary Value Problem(BVPs)(for e.g, structu
 \item Gives an approximate solution.
 \end{itemize}
 \end{spacing}
-\chapter{The Finite Differnece Method}
-\section{Introduction}
-\section{Backward Euler Method}
-\section{Crank Nicklson Method}
 
+% % Chapter one complete
+% % Chapter two starts here
+
+\chapter{Finite Element Method: Parabolic Interface}
+\section{Introduction}
+\begin{spacing}{1.5}
+The domain which we would consider for our study be rectangular domain $\Omega = (0,2)\times(0,1)$, having an interface at x = 1 such that $\Omega_{1} = (0,1)\times(0,1)$ and $\Omega_{2} = (1,2)\times(0,1)$. Consider the parabolic interface problem of the form:
+ \begin{center}
+    \begin{equation}
+       u_{t}-\bigtriangledown.\left(\beta \bigtriangledown u \right) = f(u)
+    \end{equation}
+ \end{center}
+ where $\beta$ is different at both side of equation. $\beta_{1} = 1$ for $x<1$ and $\beta_{2} = 0.5$ for $x>1$. The dirchelet boundary conditions are $u(x,0) = 0$, $u(x,1) = 0$, $u(0,y) = 0$ and $u(2,y) = 0$. Time varies from 0 to 0.1 s. The known soultion for u is given by:\\
+  \begin{center}
+     \begin{equation}
+     	\begin{split}
+     	u(x,y,t) = (exp(\sin t))(\sin\pi x . \sin\pi y) \qquad x<1 \\
+     	u(x,y,t) = (exp(\sin t))(\sin 2\pi x . \sin\pi y) \qquad x>1
+     	\end{split}
+     \end{equation}
+  \end{center}
+	The value obtained for f using equation 2.1 and 2.2 is as follows:
+ \begin{center}
+     \begin{equation}
+     	\begin{split}
+     	f(x,y,t) = (exp(\sin t))(\sin\pi x . \sin\pi y)(\cos t + 2\pi^2) \qquad x<1 \\
+     	f(x,y,t) = (-exp(\sin t))(\sin 2\pi x . \sin\pi y)(\cos t + 2.5\pi^2) \qquad x>1
+     	\end{split}
+     \end{equation}
+  \end{center}
+\end{spacing}
+\section{Basic Data Structure Scheme}
+\begin{spacing}{1.5}
+The basic data structure scheme that we are going to follow during all implemntaion is as follows:
+\begin{itemize}
+\item For maintaing coordinates of nodal values we have made a file named c4n.mat (c4n stands for coordinates for nodes) which could be easily loaded using a simple octave command load filename.mat.
+\item For maintaing node numbering of triangular elements which is always done in anticlockwise fashion is stored in file named n4e.mat (n4e stands for nodes for element).\\
+\item For maintaining node numbering of dirchelet boundary value points we have made a filenamed n4sDb.mat(where n4sDb stands for nodes for dirchelet boundary)
+\end{itemize}
+\begin{center}
+\includegraphics[scale=0.5]{mesh}\\
+Fig 2.1 Sample mesh\\
+Sample data stored in corresponding files for the given mesh in Fig 2.1\\
+\begin{tabular}{l c r}
+\hline c4n.mat & n4e.mat & n4sDb.mat \\
+0  0 & 1 2 7 & 1 2\\
+1  0 & 2 5 7 & 2 3\\
+2  0 & 5 6 7 & 3 4\\
+2  1 & 6 1 7 & 4 5\\
+1  1 & 2 3 8 & 5 6\\
+0  1 & 3 4 8 & 6 1\\
+0.5  0.5 & 4 5 8\\
+1.5  0.5 & 5 2 8\\
+\end{tabular}
+\end{center}
+\end{spacing}
+\section{Evaluation of Mass Matrix}
+\begin{spacing}{1.5}
+In order to evaluate mass matrix you need to follow this algorithm:\\
+\noindent\rule{12cm}{0.4pt}\\
+\textbf{Algorithm: Assembly of mass matrix}\\
+\noindent\rule{12cm}{0.4pt}\\
+\begin{itemize}
+\item[1:] M = size of c4n
+\item[2:] N = size of n4e
+\item[3:] Allocate memory of size $M \times M$ to a matrix B and initialize all matrix entries to zero
+\item[4:]\textbf{for} i = 1,2,3....,N \textbf{do}
+\item[5:] Compute the $3\times3$ local element of mass matrix $B^I$ given by\\
+\begin{center}
+$G$ = $\begin{bmatrix}
+       2 & 1 & 1 \\[0.3em]
+       1 & 2 & 1 \\[0.3em]
+       1 & 1 & 2
+     \end{bmatrix}$\\
+$B^{I}$ = $\frac{1}{24} \times G \times$ (Area of $i_{th}$ triangular element)
+\end{center}
+\item[6:] Add $M^{I}_{11}$ to $M_{ii}$
+\item[7:] Add $M^{I}_{12}$ to $M_{ii+1}$
+\item[8:] Add $M^{I}_{13}$ to $M_{ii+2}$
+\item[9:] Add $M^{I}_{21}$ to $M_{i+1i}$
+\item[10:] Add $M^{I}_{22}$ to $M_{i+1i+1}$
+\item[11:] Add $M^{I}_{23}$ to $M_{i+1i+2}$
+\item[12:] Add $M^{I}_{31}$ to $M_{i+2i}$
+\item[13:] Add $M^{I}_{32}$ to $M_{i+2i+1}$
+\item[14:] Add $M^{I}_{33}$ to $M_{i+2i+2}$
+\item[15:] \textbf{end for}
+\end{itemize}
+\end{spacing}
+\section{Evaluation of Stiffness Matrix}
+\begin{spacing}{1.5}
+In order to evaluate stiffness matrix you need to follow this algorithm:\\
+\noindent\rule{12cm}{0.4pt}\\
+\textbf{Algorithm: Assembly of stifness matrix}\\
+\noindent\rule{12cm}{0.4pt}\\
+\end{spacing}
+\section{Backward Euler Scheme}
+\section{Crank Nicklson Scheme}
+\section{Two Point Backward Euler Scheme}
+\section{Refinement Techniques}
 \end{document}
