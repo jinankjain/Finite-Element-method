@@ -324,7 +324,46 @@ $
 \end{itemize}
 \end{spacing}
 \section{Backward Euler Scheme}
+\begin{spacing}{1.5}
+First of all let us understand what is a basic backward euler scheme. Consider an ordinary differntial equation.
+\begin{center}
+$\frac{dy}{dt}$ = $f(t,y)$
+\end{center}
+with initial value $y(t_{o}) = y_{o}$. Here the function $f$ and the initial data $t_{o}$ and $y_{o}$ are known; the function $y$ depends on the real variable $t$ and is unknown. A numerical method produces a sequence $y_{0},y_{1},y_{2},....$ such that $y_{k}$ is approximates $y(t_{o}+kh)$, where h is called the step size. The backward Euler method computes the approximations using
+\begin{center}
+$y_{k+1}$ = $y_{k}$ + $hf(t_{k+1},y_{k+1})$
+\end{center}
+Now lets see how we implement this scheme for parabolic interface finite element method and see the assembly procedure.\\
+The volume forces are used for assembling the right hand side. Using the value of $f$ in the center of gravity $(x_{s},y_{s})$ of $T$ the integral $\int_{T}f\eta_{j}dx$ is approximated using a proper curvature rule:
+\begin{center}
+$\int_{T}f\eta_{j}dx \approx$ = $\frac{1}{6}$det$
+\begin{pmatrix}
+x_{2}-x_{1} & x_{3}-x_{1}\\
+y_{2}-y_{1} & y_{3}-y_{1}
+\end{pmatrix}
+$
+$f(x_{s},y_{s})$
+\end{center}
+\noindent\rule{12cm}{0.4pt}\\
+\textbf{Algorithm: Implementation of Backward Euler Scheme}\\
+\noindent\rule{12cm}{0.4pt}\\
+\begin{itemize}
+\item[1:] M = size of c4n
+\item[2:] N = size of n4e
+\item[3:] Initialize b matrix of size M$\times$1, u matrix of size M$\times$1 and U matrix of size M$\times$(number of time steps+1)
+\item[4:] \textbf{for} i = 1 to final time level \textbf{do}
+\item[5:] \textbf{for} each triangular element calculate the volume force and add to b.
+\item[6:] $b = b$ + $B$ * $U_{i-1}$ where B is mass matrix.
+\item[7:] $b = b$ - ($dt*A$ + $B$)*u
+\item[8:] $u$ = ($dt*A$ + $B$) * $b^{I}$
+\item[9:] $U_{n}$ = $u$
+\item[10:] \textbf{end for}
+\end{itemize}
+\end{spacing}
 \section{Crank Nicklson Scheme}
+\begin{spacing}{1.5}
+\end{spacing}
 \section{Two Point Backward Euler Scheme}
-\section{Refinement Techniques}
+\begin{spacing}{1.5}
+\end{spacing}
 \end{document}
