@@ -362,8 +362,53 @@ $f(x_{s},y_{s})$
 \end{spacing}
 \section{Crank Nicklson Scheme}
 \begin{spacing}{1.5}
+First of all let us understand what is a basic crank nicklson scheme. Consider a partial differential equation:
+\begin{center}
+$\frac{\partial u}{\partial t}$ = $F(u,x,t,\frac{\partial u}{\partial x}, \frac{\partial^{2} u}{\partial x^{2}})$
+\end{center}
+then letting $u(i\triangle x, n\triangle t) = u_{i}^{n}$, the equation for 
+Crank–Nicolson method is a combination of the forward Euler method at $n$ and the backward Euler method at$ n + 1$ (note, however, that the method itself is not simply the average of those two methods, as the equation has an implicit dependence on the solution):\\
+\begin{center}
+$\frac{u_{i}^{n + 1} - u_{i}^{n}}{\Delta t} = F_{i}^{n}\left(u,\, x,\, t,\, \frac{\partial u}{\partial x},\, \frac{\partial^2 u}{\partial x^2}\right) \qquad \mbox{(forward Euler)}
+$\\
+$\frac{u_{i}^{n + 1} - u_{i}^{n}}{\Delta t} = F_{i}^{n + 1}\left(u,\, x,\, t,\, \frac{\partial u}{\partial x},\, \frac{\partial^2 u}{\partial x^2}\right) \qquad \mbox{(backward Euler)}
+$\\
+$ \frac{u_{i}^{n + 1} - u_{i}^{n}}{\Delta t} = \frac{1}{2}\left[ F_{i}^{n + 1}\left(u,\, x,\, t,\, \frac{\partial u}{\partial x},\, \frac{\partial^2 u}{\partial x^2}\right) + F_{i}^{n}\left(u,\, x,\, t,\, \frac{\partial u}{\partial x},\, \frac{\partial^2 u}{\partial x^2}\right) \right].
+$ 
+\end{center}
+\bigskip
+Now lets see how we implement this scheme for parabolic interface finite element method and see the assembly procedure.\\
+The volume forces are used for assembling the right hand side. Using the value of $f$ in the center of gravity $(x_{s},y_{s})$ of $T$ the integral $\int_{T}f\eta_{j}dx$ is approximated using a proper curvature rule:
+\begin{center}
+$\int_{T}f\eta_{j}dx \approx$ = $\frac{1}{6}$det$
+\begin{pmatrix}
+x_{2}-x_{1} & x_{3}-x_{1}\\
+y_{2}-y_{1} & y_{3}-y_{1}
+\end{pmatrix}
+$
+$f(x_{s},y_{s})$
+\end{center}
+\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
+\noindent\rule{12cm}{0.4pt}\\
+\textbf{Algorithm: Implementation of Crank Nicklson Scheme}\\
+\noindent\rule{12cm}{0.4pt}\\
+\begin{itemize}
+\item[1:] M = size of c4n
+\item[2:] N = size of n4e
+\item[3:] Initialize b matrix of size M$\times$1, u matrix of size M$\times$1 and U matrix of size M$\times$(number of time steps+1)
+\item[4:] \textbf{for} i = 1 to final time level \textbf{do}
+\item[5:] \textbf{for} each triangular element calculate the volume force and add to b.
+\item[6:] $b = b$ + $(B-0.5*A*dt)$ * $U_{i-1}$ where B is mass matrix.
+\item[7:] $b = b$ - $(B+0.5*A*dt)*u$
+\item[8:] $u$ = $(B+0.5*A*dt)$ * $b^{I}$
+\item[9:] $U_{n}$ = $u$
+\item[10:] \textbf{end for}
+\end{itemize}
 \end{spacing}
-\section{Two Point Backward Euler Scheme}
+\chapter{Conclusion}
 \begin{spacing}{1.5}
+We were able to demonstrate that the experimental order of conergences for various estimators such space, time, $L^{2}(\Omega)$ and $H^{1}$ were in harmony with the theortical results.\\
+The finding of this experiment could be very much useful in study of various two heat conductors which have different heat conductivity or two fluids have different density and we could easily simulate these process with help of code developed during this project.\\
+The things which could be further improved is that if we could deploy some advanced algorithms in refinement techniques so that they could be boost up and we could bring down the complexity of code. At last I would like to conclude on this fact that my project could contribute to some research aspects and could have some new findings.
 \end{spacing}
 \end{document}
