@@ -226,24 +226,102 @@ $G$ = $\begin{bmatrix}
      \end{bmatrix}$\\
 $B^{I}$ = $\frac{1}{24} \times G \times$ (Area of $i_{th}$ triangular element)
 \end{center}
-\item[6:] Add $M^{I}_{11}$ to $M_{ii}$
-\item[7:] Add $M^{I}_{12}$ to $M_{ii+1}$
-\item[8:] Add $M^{I}_{13}$ to $M_{ii+2}$
-\item[9:] Add $M^{I}_{21}$ to $M_{i+1i}$
-\item[10:] Add $M^{I}_{22}$ to $M_{i+1i+1}$
-\item[11:] Add $M^{I}_{23}$ to $M_{i+1i+2}$
-\item[12:] Add $M^{I}_{31}$ to $M_{i+2i}$
-\item[13:] Add $M^{I}_{32}$ to $M_{i+2i+1}$
-\item[14:] Add $M^{I}_{33}$ to $M_{i+2i+2}$
+\item[6:] Add $B^{I}_{11}$ to $B_{ii}$
+\item[7:] Add $B^{I}_{12}$ to $B_{ii+1}$
+\item[8:] Add $B^{I}_{13}$ to $B_{ii+2}$
+\item[9:] Add $B^{I}_{21}$ to $B_{i+1i}$
+\item[10:] Add $B^{I}_{22}$ to $B_{i+1i+1}$
+\item[11:] Add $B^{I}_{23}$ to $B_{i+1i+2}$
+\item[12:] Add $B^{I}_{31}$ to $B_{i+2i}$
+\item[13:] Add $B^{I}_{32}$ to $B_{i+2i+1}$
+\item[14:] Add $B^{I}_{33}$ to $B_{i+2i+2}$
 \item[15:] \textbf{end for}
 \end{itemize}
 \end{spacing}
 \section{Evaluation of Stiffness Matrix}
 \begin{spacing}{1.5}
-In order to evaluate stiffness matrix you need to follow this algorithm:\\
+In order to evaluate stiffness matrix you need to look into some details about triangulations.
+For a trinagular element T let $(x_{1},y_{1})$, $(x_{2},y_{2})$ and $(x_{3},y_{3})$ be the vertices of the trinangle and $\eta_{1}$, $\eta_{2}$, and $\eta_{3}$ be the corresponding basis function in S, i.e.,
+\begin{center}
+$\eta_{j}(x_{k},y_{k}) = \delta_{jk},$ \qquad $j,k=1,2,3$
+\end{center}
+A moments reflection reveals\\
+\begin{center}
+$\eta_{j}(x,y) =$ det$
+ \begin{pmatrix}
+  1 & x  & y \\
+  1 & x_{j+1} & y_{j+1} \\
+  1  & x_{j+2} & y_{j+2} 
+ \end{pmatrix}/$ det$\begin{pmatrix}
+   1 & x_{j}  & y_{j} \\
+   1 & x_{j+1} & y_{j+1} \\
+   1  & x_{j+2} & y_{j+2} 
+  \end{pmatrix}
+$
+\end{center}
+whence
+\begin{center}
+$\nabla\eta_{j}(x,y) = \frac{1}{2|T|}
+\begin{pmatrix}
+y_{j+1}-y_{j+2}\\
+x_{j+2}-x_{j+1}
+\end{pmatrix}
+$
+\end{center}
+Here, the indices are to be considered modulo 3, and $|T|$ is the area of T, i.e.,
+\begin{center}
+$2|T| = $ det$
+\begin{pmatrix}
+x_{2}-x_{1} & x_{3}-x_{1}\\
+y_{2}-y_{1} & y_{3}-y_{1}
+\end{pmatrix}
+$
+\end{center}
+The resulting entry of stiffness matrix is
+\begin{center}
+$A_{jk} = \beta\int_{T} \nabla\eta_{j}(\nabla\eta_{k})^{T} dx$ = $\beta\frac{|T|}{4T^{2}}(y_{j+1}-y_{j+2}, x_{j+2}-x_{j+1})
+\begin{pmatrix}
+y_{k+1}-y_{k+2}\\
+x_{k+2}-x_{k+1}
+\end{pmatrix}
+$
+\end{center}
+Here is the parameter $\beta$ is different on both sides of interface. This is written simultaneously for all indices as:
+\begin{center}
+$A = $ $\frac{|T|}{2}.GG^{T}$ with G:= $\begin{pmatrix}
+1 & 1 & 1\\
+x_{1} & x_{2} & x_{3} \\
+y_{1} & y_{2} & y_{3}
+\end{pmatrix}^{-1}$
+$
+\begin{pmatrix}
+0 & 0\\
+1 & 0\\
+0 & 1
+\end{pmatrix}
+$
+\end{center}
 \noindent\rule{12cm}{0.4pt}\\
 \textbf{Algorithm: Assembly of stifness matrix}\\
 \noindent\rule{12cm}{0.4pt}\\
+\begin{itemize}
+\item[1:] M = size of c4n
+\item[2:] N = size of n4e
+\item[3:] Allocate memory of size $M \times M$ to a matrix A and initialize all matrix entries to zero
+\item[4:] \textbf{for} i = 1,2,3...,N \textbf{do}
+\item[5:] if T is on left hand side then take $\beta = 1$ else $\beta = 0.5$
+\item[6:] Compute the 3$\times$3 local element of stiffness matrix $A^{I}$ as explained above with proper value of $\beta$.
+\item[6:] Add $A^{I}_{11}$ to $A_{ii}$
+\item[7:] Add $A^{I}_{12}$ to $A_{ii+1}$
+\item[8:] Add $A^{I}_{13}$ to $A_{ii+2}$
+\item[9:] Add $A^{I}_{21}$ to $A_{i+1i}$
+\item[10:] Add $A^{I}_{22}$ to $A_{i+1i+1}$
+\item[11:] Add $A^{I}_{23}$ to $A_{i+1i+2}$
+\item[12:] Add $A^{I}_{31}$ to $A_{i+2i}$
+\item[13:] Add $A^{I}_{32}$ to $A_{i+2i+1}$
+\item[14:] Add $A^{I}_{33}$ to $A_{i+2i+2}$
+\item[15:] \textbf{end for}
+\end{itemize}
 \end{spacing}
 \section{Backward Euler Scheme}
 \section{Crank Nicklson Scheme}
