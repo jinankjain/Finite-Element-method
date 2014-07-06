@@ -23,27 +23,24 @@ by\\ Jinank Jain\\ (Roll No. UG201210017)\\ B.Tech, 2nd Year\\Computer Science a
  
  % % % % % Certificate Page Begins Here
  \newpage
- {\textbf{ \Large CERTIFICATE\\ \bigskip}}
+ {\textbf{ \Large ACKNOWLEDGEMENT\\ \bigskip}}
  \end{center}
- 
+ \begin{spacing}{1.5}
  \begin{flushleft}
- This is to certify that the work contained in this project report entitled as \textbf{"Implementatiom of Finite Element Method for Parabolic Interface Problem"} \textbf{Jinank Jain (Roll No. UG201210017)} to Indian Institute of Technology towards partial requirement of \textbf{Summer Internship} which has been carried out by him under my supervision and that it has not been submitted elsewhere for the award of any degree.\\
- \end{flushleft}
- \bigskip \bigskip \bigskip \bigskip \bigskip
+I take this opportunity to express my profound gratitude and deep regards to my Professor Dr. Rajen Kumar Sinha for his exemplary guidance, monitoring and constant encouragement throughout the course of this summer internship. The blessing, help and guidance given by him time to time shall carry me a long way in the journey of life on which I am about to embark. \end{flushleft}
+\end{spacing}
  
-% \noindent \textbox{Guwahati - 781 039\hfill} \textbox{\hfill  (Dr. Rajen Kumar Sinha)}\\
-% \noindent \textbox{July 2014\hfill} \textbox{\hfill  Project Supervisor} 
-\noindent Guwahati - 781 039\hfill \hfill (Dr. Rajen Kumar Sinha)\\
-\noindent July 2014\hfill \hfill Project Supervisor\\
-
-% % % % Abstract Page Begins Here
+ 
+  % % % Abstract Page Begins Here
 \newpage
 \begin{center}
  {\textbf{ \Large ABSTRACT\\ \bigskip}}
 \end{center}
+\begin{spacing}{1.5}
 \begin{flushleft}
-Finite Element Method is a numerical method for finding approximate solution to boundary value problems for differntial equation. It uses variational method to minimize an error function and produce a stable solution.
+Finite Element Method is a numerical method for finding approximate solution to boundary value problems for differntial equation. It uses variational method to minimize an error function and produce a stable solution. A portion of which is Parabolic Interface Finite Element Method which has broad spectrum of application. This report deals mainly with its implementation using various schemes such as Backward Euler Scheme and Crank Nicolson Scheme. There is detail algorithms given for the above mentioned scheme. It contains various steps for calculating stifness and mass matrix and in the end the assembly process.
 \end{flushleft}
+\end{spacing} 
 
 % % % % Contents Page
 
@@ -64,7 +61,7 @@ There are three stages in the whole process where errors are generally introduce
 \end{spacing}
 \section{Implementaion with Analysis}
 \begin{spacing}{1.5}
-To better understand how to implement the finite element method to a problem, we take an example from [11].\\ \\
+To better understand how to implement the finite element method to a problem, we take an example from [1].\\ \\
 \textbf{Example 1.3.1.} Approximation of the perimeter of a circle.\\
 Consider the problem of determining the perimeter of a circle of radius R without using the formula ($P = 2\pi r$) for the perimater of a circle. Ancient mathematicians used to approximate value of the perimeter by straight line segments as $\pi$ was not known. Thus, the approximate value of the perimeter is obtained by adding the length pf the line segments used to represent it.\\
 \begin{center}
@@ -411,4 +408,50 @@ We were able to demonstrate that the experimental order of conergences for vario
 The finding of this experiment could be very much useful in study of various two heat conductors which have different heat conductivity or two fluids have different density and we could easily simulate these process with help of code developed during this project.\\
 The things which could be further improved is that if we could deploy some advanced algorithms in refinement techniques so that they could be boost up and we could bring down the complexity of code. At last I would like to conclude on this fact that my project could contribute to some research aspects and could have some new findings.
 \end{spacing}
+\newpage
+\begin{center}
+\textbf{Finite Element Solution Using Backward Euler Scheme}\\
+\includegraphics[scale=0.25]{1}\hspace*{70cm}\\
+{Fig 3.1 After First iteration}
+\includegraphics[scale=0.6]{2}\hspace*{70cm}\\
+{Fig 3.2 After Second iteration}
+\includegraphics[scale=0.6]{3}\hspace*{70cm}\\
+{Fig 3.2 After Third iteration}
+\includegraphics[scale=0.6]{4}\hspace*{70cm}\\
+{Fig 3.2 After Fourth iteration}
+\end{center}
+
+\newpage
+\begin{center}
+\textbf{Finite Element Solution Using Crank Nicolson  Scheme}\\
+\includegraphics[scale=0.58]{11}\hspace*{70cm}
+{Fig 3.1 After First iteration}
+\includegraphics[scale=0.58]{22}\hspace*{70cm}
+{Fig 3.2 After Second iteration}
+\includegraphics[scale=0.58]{33}\hspace*{70cm}
+{Fig 3.2 After Third iteration}
+\includegraphics[scale=0.58]{44}\hspace*{70cm}
+{Fig 3.2 After Fourth iteration}
+\end{center}
+
+
+% % Bibliography
+\newpage
+\begin{thebibliography}{9}
+\bibitem{FiniteElementMethod} J.N Reddy \emph{An Introduction to The Finite Element Method}, McGraw-Hill, New York, 2005.
+
+
+\bibitem{50LinesMatlab}
+Jochen Alberty, Carsten Carstensen and Stefan A. Funken \emph{50 lines of Matalab: Short Finite Element Implementation}.
+
+\bibitem{Larson} Mats G. Larson, Fredrik Bengzon, \emph{The Finite Element Method:
+Theory, Implementation, and Practice}.
+
+\bibitem{Endre} Endre S\"{u}li, \emph{Finite Element Methods for Partial
+Differential Equations}.
+
+\end{thebibliography}
+
 \end{document}
+
+
