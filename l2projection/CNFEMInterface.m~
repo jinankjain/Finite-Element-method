@@ -1,0 +1,22 @@
+function[L2, U, A, B, ndof] = L2Pojection(c4n,n4e,dirichlet,N,dt)
+B = sparse(M,M);
+x = zeros(M,1); 
+ndof = length(FreeNodes);
+U = sparse(M,N+1); 
+L2 = zeros(N+1,1);
+ndof = length(FreeNodes);
+for j = 1:size(n4e,1)
+  B(n4e(j,:),n4e(j,:)) = B(n4e(j,:),n4e(j,:)) ...
+     + det([1,1,1;c4n(n4e(j,:),:)'])*[2,1,1;1,2,1;1,1,2]/24;
+end
+
+	
+for n = 2:N+1
+  b = sparse(M,1);
+  for j = 1:size(n4e,1)
+    b(n4e(j,:)) = b(n4e(j,:)) ...
+  + 0.5*det([1,1,1; c4n(n4e(j,:),:)']) * dt*(f(sum(c4n(n4e(j,:),:))/3,n*dt)/6 + f(sum(c4n(n4e(j,:),:))/3,(n-1)*dt)/6);
+  end
+	L2 = b\B;
+  end
+show(n4e,[],c4n,full(L2));

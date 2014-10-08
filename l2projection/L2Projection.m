@@ -1,0 +1,20 @@
+function[L2f, ndof] = L2Projection(c4n,n4e,dirichlet)
+M = size(c4n,1);
+B = sparse(M,M);
+FreeNodes = setdiff(1:M,unique(dirichlet));
+ndof = length(FreeNodes);
+%U = sparse(M,N+1); 
+L2f = zeros(M,1);
+ndof = length(FreeNodes);
+for j = 1:size(n4e,1)
+  B(n4e(j,:),n4e(j,:)) = B(n4e(j,:),n4e(j,:)) ...
+     + det([1,1,1;c4n(n4e(j,:),:)'])*[2,1,1;1,2,1;1,1,2]/24;
+end
+
+  b = sparse(M,1);
+  for j = 1:size(n4e,1)
+    b(n4e(j,:)) = b(n4e(j,:))+det([1,1,1; c4n(n4e(j,:),:)']) * (f(sum(c4n(n4e(j,:),:))/3)/6);
+  end
+	L2f = b\B;
+	L2f = L2f(1);
+%show(n4e,[],c4n,full(L2f));

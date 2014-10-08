@@ -1,0 +1,18 @@
+function Estm = h1spaceestimator(j,c4n,n4e,n4sDb,T,N,dt,h,U)
+[U,A,B,ndof] = FEMPIDE(c4n,n4e,unique(n4sDb),N,dt);
+etaE1(j) = h^(1/2)*sqrt(sum(edgeresidualh1sum(c4n,n4e,n4sDb,U,j)));
+etaf1 = h*sqrt(sum(residualh1sum(n4e,c4n,U,1,T,dt)));
+if j == 1
+    Estm = etaE1(1) + etaf1;
+else
+    etaE = 0;
+    etaE = etaE1(j);
+    for l = 2:j
+	   x = find(c4n(:,1)<1);
+       etaE = etaE - h^(1/2)*sqrt(sum(edgeresidualh1sum(x,n4e,n4sDb,U,l-1)));
+	   x = find(c4n(:,1)>1);
+	   etaE = etaE - h^(1/2)*0.5*sqrt(sum(edgeresidualh1sum(x,n4e,n4sDb,U,l-1)));
+    end
+    etaf = h*sqrt(sum(residualh1sum(n4e,c4n,U,j,T,dt)));
+    Estm = etaE + etaf;
+ end

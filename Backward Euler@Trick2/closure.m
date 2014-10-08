@@ -1,0 +1,78 @@
+function n4sRefine = closure(n4e, n4sMarked)
+%% closure - Mark Reference Sides.
+%   closure(n4e, n4sMarked) markes the reference side of each element with
+%       a marked side. The reference side of an element is its first one.
+%   	n4e is as specified in the documentation, n4sMarked has the same
+%       structure as n4s.
+%       The output is a new list of marked sides having the same structure
+%       as n4s.
+
+    %% Preliminary work.
+    nrNodes = max(max(n4e));
+    nrElems = size(n4e,1);
+    e4n = computeE4n(n4e);
+                
+    %% Initialize the matrix of marked sides.
+    %  This is a symmetric matrix where entry (j,k) is 1 iff there is a
+    %  marked side between nodes j and k.
+    marked4n = sparse(n4sMarked(:,[1 2]), n4sMarked(:,[2 1]),...
+                      ones(size(n4sMarked,1),2),nrNodes,nrNodes);
+
+    %% Execute the closure algorithm.
+    for curElem = 1 : nrElems
+        curNodes = n4e(curElem,:);
+        % While the current element's reference side is not marked and 
+        % another side of the current element is marked....
+        while marked4n(curNodes(1),curNodes(2)) == 0 ...
+              && ( marked4n(curNodes(2),curNodes(3)) == 1 ...
+                   || marked4n(curNodes(3),curNodes(1)) == 1 )
+            % ... mark the reference side.
+            marked4n(curNodes(1),curNodes(2)) = 1;
+            marked4n(curNodes(2),curNodes(1)) = 1;
+            % Marking the reference side of the current element may have
+            % created a similar situation on the neighbouring element. We
+            % need to handle this.
+            % Tricky but true: e4n(curNodes(1),curNodes(2)) will return
+            % curElem while this returns the neighbouring element number:
+            neighbourElem = e4n(curNodes(2),curNodes(1));
+
+            if neighbourElem > 0
+                curNodes = n4e(neighbourElem,:);
+            end
+        end
+    end
+
+    %% Assemble the side list for refinement.
+    marked4n = triu(marked4n);
+    [row,col] = find(marked4n);
+    n4sRefine = [row,col];
+end
+
+
+% this function bascially returns a sparse matrix in which contains each side belongs to which 
+% which element and in that also there is a convention of following the anti-clockwise order
+ 
+function e4n = computeE4n(n4e)
+%% computeE4n - Elements for nodes.
+%   computeE4n(n4e) returns a sparse matrix in which the entry (j,k) contains
+%               the number of the element that has the nodes j and k in
+%               counterclockwise order (or 0 if no such element exists).
+%               n4e is as specified in the documentation.
+
+
+    if isempty(n4e)
+        e4n = [];
+        return;
+    end
+
+    %% Compute e4n.
+    % Create a list of all sides in the decomposition and build a sparse
+    % matrix such that each side computes its proper element number.
+    allSides = [n4e(:,[1 2]); n4e(:,[2 3]); n4e(:,[3 1])];
+    nrElems = size(n4e,1);
+    N = max(max(n4e));
+    elemNumbers = [1:nrElems 1:nrElems 1:nrElems];
+    e4n = sparse(allSides(:,1),allSides(:,2),elemNumbers,N,N);
+end
+
+
